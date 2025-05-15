@@ -398,7 +398,7 @@ module.exports = function (jsxHelper, { pug, loaderUtils }) {
     ];
     let components = (source.match(/<([A-Z][a-zA-Z0-9_]+)/g) || []).reduce((distinct, curr) => {
       const tagName = curr.substr(1);
-      if (tagName && distinct.indexOf(tagName) === -1) {
+      if (tagName && distinct.indexOf(tagName) === -1 && tagName !== 'Fragment') {
         distinct.push(tagName);
       }
       return distinct;
