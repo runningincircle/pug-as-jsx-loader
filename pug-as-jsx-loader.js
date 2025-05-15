@@ -132,6 +132,18 @@ module.exports = function (jsxHelper, { pug, loaderUtils }) {
         replacement: current.replace(pattern, (whole, p1, p2, p3, p4) => `${p1 + p2}style="{{ display: (${p4.replace(/"/g, '\\"')} ? \\"none\\" : \\"\\") }}"`),
       }),
     },
+    {
+      // variable assignment
+      pattern: /^-([\s\t]*)([a-zA-Z0-9_$]+)\s*=\s*([^\n]+)/,
+      process: (current, pattern) => {
+        const [, indent, variable, value] = current.match(pattern);
+        return {
+          startBlock: `${indent}| { const ${variable} = ${value};`,
+          replacement: '',
+          endBlock: `${indent}| }`,
+        };
+      },
+    },
   ];
 
   const cmtAnnots = [
