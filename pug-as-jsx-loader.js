@@ -451,7 +451,7 @@ module.exports = function (jsxHelper, { pug, loaderUtils }) {
         }
         // eslint-disable-next-line prefer-template
         const jsxOutput = `${[
-          "import React from 'react';",
+          "import React, { Fragment } from 'react';",
           useMacro ? IMPORT_MACRO : '',
           ...importComponents.map(({ name, from }) => `import ${name} from '${from}';`),
           ...importVariables.map(({ name, from }) => `import ${name} from '${from}';`),
