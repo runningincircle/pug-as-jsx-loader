@@ -132,22 +132,6 @@ module.exports = function (jsxHelper, { pug, loaderUtils }) {
         replacement: current.replace(pattern, (whole, p1, p2, p3, p4) => `${p1 + p2}style="{{ display: (${p4.replace(/"/g, '\\"')} ? \\"none\\" : \\"\\") }}"`),
       }),
     },
-    {
-      // variable assignment
-      pattern: /^-([\s\t]*)(var|const)\s+([a-zA-Z0-9_$]+)(?:\s*=\s*([^\n]+))?/,
-      process: (current, pattern) => {
-        const [, indent, declaration, variable, value] = current.match(pattern);
-        // If there's a value, create a const declaration, otherwise just declare the variable
-        const declarationStr = value ? 
-          `${indent}| { const ${variable} = ${value};` :
-          `${indent}| { const ${variable};`;
-        return {
-          startBlock: declarationStr,
-          replacement: '',
-          endBlock: `${indent}| }`,
-        };
-      },
-    },
   ];
 
   const cmtAnnots = [
