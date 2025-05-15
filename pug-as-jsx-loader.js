@@ -548,14 +548,13 @@ module.exports = function (jsxHelper, { pug, loaderUtils }) {
     });
   };
 
-  const renderPug = (source, { store, files }) => {
+  const renderPug = (source, { store, files }, options) => {
     // prepare for case sensitive
     let replaced = source
       .replace(/__jsx=/g, () => {
         jsxSyntaxIndex += 1;
         return `jsx-syntax-${jsxSyntaxIndex}--=`;
       })
-      .replace(/([A-Z])/g, (whole, p1) => `upper___${p1}`)
       .replace(/(upper___[A-Za-z0-9]+)\.(upper___)/g, (whole, p1, p2) => `${p1}___dot_btw_cpnts___${p2}`);
 
     // remove comment
@@ -625,7 +624,7 @@ module.exports = function (jsxHelper, { pug, loaderUtils }) {
       .replace(/key='\{.*?\}',([^)]*key='\{.*?\}')/, '$1');
 
     // render to html and restore case sensitive
-    replaced = pug.render(replaced, { pretty: true }).replace(/upper___([a-zA-Z])/g, (whole, p1) => p1.toUpperCase()).replace(/\{([^{}]+)\}/g, (whole, p1) => `{${p1.replace(/&quot;/g, '"')}}`);
+    replaced = pug.render(replaced, { pretty: true, basedir: options.rootDir }).replace(/\{([^{}]+)\}/g, (whole, p1) => `{${p1.replace(/&quot;/g, '"')}}`);
 
     replaced = replaced.replace(/<!--\s*@(.*?)\s*-->/g, (whole, p1) => {
       cmtAnnots.forEach((annot) => {
@@ -706,7 +705,7 @@ module.exports = function (jsxHelper, { pug, loaderUtils }) {
     let useMacro = false;
     if (isJsFile) {
       replaced = source.replace(/(\n)?(\s*)?(.*)\s+pug`([\s\S]+?)`/g, (whole, _p0, _p1, p2, p3) => {
-        const result = renderPug(p3.trim(), { store, files });
+        const result = renderPug(p3.trim(), { store, files }, options);
         useMacro = useMacro || result.useMacro;
         const p0 = _p0 || '';
         const p1 = _p1 || '';
@@ -718,7 +717,7 @@ module.exports = function (jsxHelper, { pug, loaderUtils }) {
         return `${p0}${p1}${p2} (\n${rendered}\n${p1})`;
       });
     } else {
-      const rendered = renderPug(source, { store, files });
+      const rendered = renderPug(source, { store, files }, options);
       replaced = rendered.replaced;
       useMacro = useMacro || rendered.useMacro;
     }
