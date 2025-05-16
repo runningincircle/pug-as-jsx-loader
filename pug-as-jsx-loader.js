@@ -443,12 +443,12 @@ module.exports = function (jsxHelper, { pug, loaderUtils }) {
         const importCss = store.importCss || [];
         let exportsFn;
         if (refs.length > 0) {
-          exportsFn = `export default function (params = {}) {\n  const { ${refs.join(', ')} } = params;`;
+          exportsFn = `export default function PugAsJsx(params = {}) {\n  const { ${refs.join(', ')} } = params;`;
           if (exportsFn.length > MAX_LINE_LENGTH) {
-            exportsFn = `export default function (params = {}) {\n  const {\n    ${refs.join(',\n    ')},\n  } = params;`;
+            exportsFn = `export default function PugAsJsx(params = {}) {\n  const {\n    ${refs.join(',\n    ')},\n  } = params;`;
           }
         } else {
-          exportsFn = 'export default function () {';
+          exportsFn = 'export default function PugAsJsx() {';
         }
         // eslint-disable-next-line prefer-template
         const jsxOutput = `${[
