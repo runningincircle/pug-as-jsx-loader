@@ -394,6 +394,7 @@ module.exports = function (jsxHelper, { pug, loaderUtils }) {
       'Object', 'String', 'Number', 'Array',
       'JSON', 'Math', 'null', 'this',
       'return', 'true', 'false', 'new', 'event', 'React', 'typeof',
+      'dangerouslySetInnerHTML',
       LINE_DIVIDER, LESS_THAN, GREATER_THAN,
     ];
     let components = (source.match(/<([A-Z][a-zA-Z0-9_]+)/g) || []).reduce((distinct, curr) => {
